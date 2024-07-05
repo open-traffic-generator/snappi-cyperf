@@ -1,4 +1,4 @@
-# snappi extension for IxLoad
+# snappi extension for Cyperf
 
 This extension allows executing tests written using [snappi](https://github.com/open-traffic-generator/snappi) against  
 Cyperf, (one of) Keysight's implementation of [Open Traffic Generator](https://github.com/open-traffic-generator/models/releases).
