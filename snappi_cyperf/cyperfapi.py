@@ -117,8 +117,9 @@ class Api(snappi.Api):
         request_detail.warnings = warnings
         return request_detail
 
-    def cleanup_session(self):
+    def close(self):
         self._disconnect()
+        self._disconnect_all_sessions()
 
     def cleanup_all_sessions(self):
         self._disconnect_all_sessions()
@@ -138,11 +139,10 @@ class Api(snappi.Api):
             # self._ip_list = self.common.get_protocol_ip(config)
             self._l47config = config
             # self.interfaces.config()
-            # rest.assign_agents()
             # self.tcp.config()
             # self.http_sr.config()
             # self.http_cl.config()
-            # self.port.config()
+            self.port.config(rest)
             # self._apply_config()
         except Exception as err:
             self.logger.info(f"error:{err}")
