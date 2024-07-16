@@ -385,6 +385,8 @@ class RESTasV3:
         # payload = {}
         self.configID = configID
         response = self.__sendPost(apiPath, payload={"configUrl": self.configID})
+        if response:
+            self.sessionID = response.json()[0]["id"]
         print("create_session response - ", response)
         return response
 
@@ -1078,6 +1080,34 @@ class RESTasV3:
             self.sessionID, network_segment, ip_range
         )
         self.__sendPatch(apiPath, payload={"Mss": mss})
+
+    def set_ip_range_vlan_range(
+        self,
+        vlan_id=1,
+        vlan_incr=1,
+        count=1,
+        count_per_agent=1,
+        tag_protocol_id=33024,
+        priority=1,
+        vlan_enable=True,
+        network_segment=1,
+        ip_range=1,
+    ):
+        apiPath = "/api/v2/sessions/{}/config/config/NetworkProfiles/1/IPNetworkSegment/{}/IPRanges/{}/InnerVlanRange".format(
+            self.sessionID, network_segment, ip_range
+        )
+        self.__sendPatch(
+            apiPath,
+            payload={
+                "VlanEnabled": vlan_enable,
+                "VlanId": vlan_id,
+                "VlanIncr": vlan_incr,
+                "Count": count,
+                "CountPerAgent": count_per_agent,
+                "TagProtocolId": tag_protocol_id,
+                "Priority": priority,
+            },
+        )
 
     def set_eth_range_mac_auto_false(self, network_segment=1):
         apiPath = "/api/v2/sessions/{}/config/config/NetworkProfiles/1/IPNetworkSegment/{}/EthRange".format(
