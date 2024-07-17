@@ -8,50 +8,62 @@ import snappi
 api = snappi.api(location="http://127.0.0.1:5000", verify=False)
 config = api.config()
 
-port_1 = config.ports.port(name="p1", location="tomini.buh.is.keysight.com/1/1")[-1]
-port_2 = config.ports.port(name="p2", location="tomini.buh.is.keysight.com/2/1")[-1]
+port_1_ip = config.ports.port(name="p1", location="10.39.44.120")[-1]
+port_2_ip = config.ports.port(name="p2", location="10.39.44.195")[-1]
+
+# port_1_tag = config.ports.port(name="p1", location="user:port1")[-1]
+# port_2_tag = config.ports.port(name="p2", location="user:port2")[-1]
 
 (d1, d2) = config.devices.device(name="d1").device(name="d2")
 (e1,) = d1.ethernets.ethernet(name="d1.e1")
-# (e1,e3) = d1.ethernets.ethernet(name="d1.e1").ethernet(name="d1.e3")
 e1.connection.port_name = "p1"
 e1.mac = "70:9C:91:69:00:00"
-# e1.step = "00:00:00:00:00:01"
-# e1.count = 1
-# e3.mac = "00:00:01:00:00:03"
-# e3.step = "00:00:00:00:00:01"
-# e3.count = 1
+e1.step = "00:00:00:00:00:01"
+e1.count = 1
+e1.max_count = 100
+e1.mtu = 1450
 
 (e2,) = d2.ethernets.ethernet(name="d2.e2")
 e2.connection.port_name = "p2"
 e2.mac = "7C:5D:68:26:00:00"
+e2.step = "00:00:00:00:00:02"
+e2.count = 2
+e2.max_count = 200
+e2.mtu = 1450
 
 (vlan1,) = e1.vlans.vlan(name="vlan1")
 vlan1.id = 1
 vlan1.priority = 1
 vlan1.tpid = "x8100"
-# (vlan3,) = e3.vlans.vlan(name = "vlan3")
-# vlan3.id = 1
-# vlan3.priority = 1
-# vlan3.tpid = "x8100"
+vlan1.count = 1
+vlan1.step = 1
+vlan1.per_count = 1
+
 (vlan2,) = e2.vlans.vlan(name="vlan2")
 vlan2.id = 1
 vlan2.priority = 1
 vlan2.tpid = "x8100"
+vlan2.count = 1
+vlan2.step = 1
+vlan2.per_count = 1
+
 (ip1,) = e1.ipv4_addresses.ipv4(name="e1.ipv4")
 ip1.address = "173.173.173.10"
-ip1.gateway = "0.0.0.0"
+ip1.gateway = "173.173.173.30"
 ip1.step = "0.0.0.1"
 ip1.count = 1
-# (ip3,) = e3.ipv4_addresses.ipv4(name="e3.ipv4")
-# ip3.address = "173.173.173.20"
-# ip3.gateway = "0.0.0.0"
-# ip3.step = "0.0.0.1"
-# ip3.count = 1
+ip1.max_count = 1
+ip1.prefix = 16
+ip1.ip_range_id = 1
+
 (ip2,) = e2.ipv4_addresses.ipv4(name="e2.ipv4")
 ip2.address = "173.173.173.30"
-ip2.gateway = "0.0.0.0"
-
+ip2.gateway = "173.173.173.10"
+ip2.step = "0.0.0.2"
+ip2.count = 2
+ip2.max_count = 2
+ip2.prefix = 12
+ip2.ip_range_id = 1
 
 # TCP/UDP configs
 
@@ -265,6 +277,7 @@ print("In test before set_config")
 response = api.set_config(config)
 print("In test after set_config")
 print(response)
+api.close()
 
 # cs = api.control_state()
 # cs.app.state = "start"  # cs.app.state.START

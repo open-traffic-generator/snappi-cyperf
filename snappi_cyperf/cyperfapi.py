@@ -64,6 +64,8 @@ class Api(snappi.Api):
         self._username = username
         self._password = password
         self._config_url = {}
+        self._network_segments = {}
+        self._ip_ranges = {}
         self.configID = None
         self.session_id = None
 
@@ -116,13 +118,6 @@ class Api(snappi.Api):
         warnings.append("")
         request_detail.warnings = warnings
         return request_detail
-
-    def close(self):
-        self._disconnect()
-        self._disconnect_all_sessions()
-
-    def cleanup_all_sessions(self):
-        self._disconnect_all_sessions()
 
     def set_config(self, config):
         """Set or update the configuration"""
@@ -305,12 +300,6 @@ class Api(snappi.Api):
         if response:
             self.session_id = response.json()[0]["id"]
             print("Config successfully opened, session ID: {}".format(self.session_id))
-
-    def _disconnect(self):
-        rest.delete_current_session()
-
-    def _disconnect_all_sessions(self):
-        rest.delete_all_sessions()
 
     def _connect(self):
         """Connect to s Cyperf API Server."""

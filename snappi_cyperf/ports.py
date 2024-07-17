@@ -23,9 +23,13 @@ class port(object):
             port_config = self._config.ports
             for port in port_config:
                 if self._is_valid_ip(port.location):
-                    self._assign_agents_by_ip(rest, port.location, int(port.name))
+                    self._assign_agents_by_ip(
+                        rest, port.location, self._api._network_segments[port.name]
+                    )
                 else:
-                    self._assign_agents_by_tag(rest, port.location, int(port.name))
+                    self._assign_agents_by_tag(
+                        rest, port.location, self._api._network_segments[port.name]
+                    )
 
             # rest.assign_agents()
             # rest.assign_agents_by_tag("user:port1", 1)
@@ -41,11 +45,11 @@ class port(object):
         except ValueError:
             return False
 
-    def _assign_agents_by_ip(self, rest, location, name):
-        rest.assign_agents_by_ip(location, int(name))
+    def _assign_agents_by_ip(self, rest, location, network_segment):
+        rest.assign_agents_by_ip(location, network_segment)
 
-    def _assign_agents_by_tag(self, rest, location, name):
-        rest.assign_agents_by_tag(location, int(name))
+    def _assign_agents_by_tag(self, rest, location, network_segment):
+        rest.assign_agents_by_tag(location, network_segment)
 
     # def _create_chassis(self, rest):
     #     """Add any scenarios to the api server that do not already exist"""
