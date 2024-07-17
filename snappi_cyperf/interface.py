@@ -35,33 +35,98 @@ class interfaces(object):
         with Timer(self._api, "Interface Configuration"):
             self._create_devices(rest)
 
-            # print("Device :- ", device)
-
     def _create_devices(self, rest):
         """Add any scenarios to the api server that do not already exist"""
-        #     for device in self._devices_config:
-        #         # url1 = self._api._cyperf + "cyperf/test/activeTest/communityList"
-        #         # payload = {}
-        #         # response = self._api._request("POST", url1, payload)
-        #         # new_url = url1 + "/" + response + "/network/stack/childrenList"
-        #         # self._api._config_url[device.name] = new_url
-        #         # self._delete_ethernet(device, new_url)
         for device in self._devices_config:
             self._create_ethernet(device, rest)
 
     def _create_ethernet(self, device, rest):
         """Add any scenarios to the api server that do not already exist"""
         for ethernet in device.ethernets:
-            rest.set_eth_range_mac_start(ethernet.mac, int(ethernet.name))
-            rest.set_eth_range_mac_increment(ethernet.step, int(ethernet.name))
-            rest.set_eth_range_max_mac_count(ethernet.count, int(ethernet.name))
-            rest.set_eth_range_max_mac_count_per_agent(
-                ethernet.max_count, int(ethernet.name)
+            payload = {
+                "MacAuto": False,
+                "MacStart": ethernet.mac,
+                "MacIncr": ethernet.step,
+                "OneMacPerIP": False,
+                "Count": ethernet.count,
+                "maxCountPerAgent": ethernet.max_count,
+            }
+            rest.set_eth_range(
+                payload,
+                int(ethernet.name),
+            )
+            self._create_ipv4(ethernet, rest)
+
+    def _create_ipv4(self, ethernet, rest):
+        """
+        Add any ipv4 to the api server that do not already exist
+        """
+        ipv4_addresses = ethernet.get("ipv4_addresses")
+        if ipv4_addresses is None:
+            return
+        for ipv4 in ethernet.ipv4_addresses:
+            print("ipv4 - ", ipv4)
+            payload = {
+                "IpAuto": False,
+                "IpStart": ipv4.address,
+                "IpIncr": ipv4.step,
+                "Count": ipv4.count,
+                "maxCountPerAgent": ipv4.max_count,
+                "NetMaskAuto": False,
+                "NetMask": ipv4.prefix,
+                "GwAuto": False,
+                "GwStart": ipv4.gateway,
+                "networkTags": ["network " + ipv4.name],
+                "Mss": ethernet.mtu - 28,
+            }
+            rest.set_ip_range(
+                payload,
+                int(ipv4.name),
+                ipv4.ip_range_id,
+            )
+            self._create_vlan(ethernet, rest, int(ethernet.name), ipv4.ip_range_id)
+
+    def _create_vlan(self, ethernet, rest, network_segment, ip_range_id):
+        """
+        Add any ipv4 to the api server that do not already exist
+        """
+        vlans = ethernet.get("vlans")
+        if vlans is None:
+            return
+        for vlan in ethernet.vlans:
+            print("vlan tpid : ", vlan.tpid)
+            payload = {
+                "VlanEnabled": True,
+                "VlanId": vlan.id,
+                "VlanIncr": vlan.step,
+                "Count": vlan.count,
+                "CountPerAgent": vlan.per_count,
+                "TagProtocolId": 33024,
+                "Priority": vlan.priority,
+            }
+            rest.set_ip_range_innervlan_range(
+                payload,
+                network_segment,
+                ip_range_id,
             )
 
-            self._create_ipv4(ethernet, rest)
-            self._create_vlan(ethernet, rest, int(ethernet.name))
+    # def _create_devices(self):
+    #     """Add any scenarios to the api server that do not already exist
+    #     """
+    #     for device in self._devices_config:
+    #         url1 = self._api._ixload + "ixload/test/activeTest/communityList"
+    #         payload = {}
+    #         response = self._api._request('POST', url1, payload)
+    #         new_url = url1 + "/" + response + "/network/stack/childrenList"
+    #         self._api._config_url[device.name] = new_url
+    #         #self._delete_ethernet(device, new_url)
+    #     for device in self._devices_config:
+    #         self._create_ethernet(device)
+    #         #self._create_ipv4()
 
+    # def _create_ethernet(self, device):
+    #     """Add any scenarios to the api server that do not already exist
+    #     """
     #     flag = 1
     #     for ethernet in device.ethernets:
     #         if flag:
@@ -126,25 +191,6 @@ class interfaces(object):
     #     payload = {"objectID": response[0]["objectID"]}
     #     response = self._api._request("DELETE", url, payload)
 
-    def _create_ipv4(self, ethernet, rest):
-        ipv4_addresses = ethernet.get("ipv4_addresses")
-        if ipv4_addresses is None:
-            return
-        for ipv4 in ethernet.ipv4_addresses:
-            print("ipv4 - ", ipv4)
-            rest.set_ip_range_ip_start(ipv4.address, int(ipv4.name), ipv4.ip_range_id)
-            rest.set_ip_range_ip_increment(ipv4.step, int(ipv4.name), ipv4.ip_range_id)
-            rest.set_ip_range_ip_count(ipv4.count, int(ipv4.name), ipv4.ip_range_id)
-            rest.set_ip_range_max_count_per_agent(
-                ipv4.max_count, int(ipv4.name), ipv4.ip_range_id
-            )
-            rest.set_ip_range_netmask(ipv4.prefix, int(ipv4.name), ipv4.ip_range_id)
-            rest.set_ip_range_gateway(ipv4.gateway, int(ipv4.name), ipv4.ip_range_id)
-            rest.set_ip_range_network_tags(
-                "network " + ipv4.name, int(ipv4.name), ipv4.ip_range_id
-            )
-            rest.set_ip_range_mss(ipv4.mss, int(ipv4.name), ipv4.ip_range_id)
-
     # def _create_ipv4(self, ethernet, url, flag):
     #     """
     #     Add any ipv4 to the api server that do not already exist
@@ -157,25 +203,6 @@ class interfaces(object):
     #         if payload:
     #             response = self._api._request("PATCH", url, payload)
     #             self._api._config_url[ipv4.name] = url
-
-    def _create_vlan(self, ethernet, rest, ns):
-        vlans = ethernet.get("vlans")
-        if vlans is None:
-            return
-        for vlan in ethernet.vlans:
-            print("vlan tpid : ", vlan.tpid)
-            rest.set_ip_range_vlan_range(
-                vlan.id,
-                vlan.step,
-                vlan.count,
-                vlan.per_count,
-                # vlan.tpid,
-                33024,
-                vlan.priority,
-                True,
-                ns,
-                1,
-            )
 
     # def _create_vlan(self, ethernet, vlan_url, flag):
     #     """

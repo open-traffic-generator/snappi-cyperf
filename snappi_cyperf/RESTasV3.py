@@ -1081,15 +1081,36 @@ class RESTasV3:
         )
         self.__sendPatch(apiPath, payload={"Mss": mss})
 
-    def set_ip_range_vlan_range(
+    def set_eth_range(
         self,
-        vlan_id=1,
-        vlan_incr=1,
-        count=1,
-        count_per_agent=1,
-        tag_protocol_id=33024,
-        priority=1,
-        vlan_enable=True,
+        payload,
+        network_segment=1,
+    ):
+        apiPath = "/api/v2/sessions/{}/config/config/NetworkProfiles/1/IPNetworkSegment/{}/EthRange".format(
+            self.sessionID, network_segment
+        )
+        self.__sendPatch(
+            apiPath,
+            payload,
+        )
+
+    def set_ip_range(
+        self,
+        payload,
+        network_segment=1,
+        ip_range=1,
+    ):
+        apiPath = "/api/v2/sessions/{}/config/config/NetworkProfiles/1/IPNetworkSegment/{}/IPRanges/{}".format(
+            self.sessionID, network_segment, ip_range
+        )
+        self.__sendPatch(
+            apiPath,
+            payload,
+        )
+
+    def set_ip_range_innervlan_range(
+        self,
+        payload,
         network_segment=1,
         ip_range=1,
     ):
@@ -1098,15 +1119,7 @@ class RESTasV3:
         )
         self.__sendPatch(
             apiPath,
-            payload={
-                "VlanEnabled": vlan_enable,
-                "VlanId": vlan_id,
-                "VlanIncr": vlan_incr,
-                "Count": count,
-                "CountPerAgent": count_per_agent,
-                "TagProtocolId": tag_protocol_id,
-                "Priority": priority,
-            },
+            payload,
         )
 
     def set_eth_range_mac_auto_false(self, network_segment=1):
