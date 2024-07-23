@@ -8,9 +8,11 @@ import snappi
 api = snappi.api(location="http://127.0.0.1:5000", verify=False)
 config = api.config()
 
-port_1_ip = config.ports.port(name="p1", location="10.39.44.120")[-1]
-port_2_ip = config.ports.port(name="p2", location="10.39.44.195")[-1]
+# port_1_ip = config.ports.port(name="p1", location="10.39.44.120")[-1]
+# port_2_ip = config.ports.port(name="p2", location="10.39.44.195")[-1]
 
+port_1_ip = config.ports.port(name="p1", location="10.39.44.147")[-1]
+port_2_ip = config.ports.port(name="p2", location="10.39.44.190")[-1]
 # port_1_tag = config.ports.port(name="p1", location="user:port1")[-1]
 # port_2_tag = config.ports.port(name="p2", location="user:port2")[-1]
 
@@ -69,82 +71,22 @@ ip2.ip_range_id = 1
 
 (t1,) = d1.tcps.tcp(name="Tcp1")
 t1.ip_interface_name = ip1.name
-t1.adjust_tcp_buffers = False
-t1.keep_alive_time = 7000
-t1.keep_alive_interval = 60
-t1.receive_buffer_size = 8065
-t1.transmit_buffer_size = 8065
-t1.adjust_tcp_buffers = True
-t1.retransmission_minimum_timeout = 180
-t1.retransmission_maximum_timeout = 1000
-t1.minimum_source_port = 80
-t1.maximum_source_port = 1024
-t1.inter_packet_gap = 9
-t1.inter_packet_delay = 1
-t1.ip_fragment_time = 1
-t1.fin_timeout = 60
-t1.syn_retries = 5
-t1.synack_retries = 5
-t1.retansmit_retries1 = 3
-t1.retransmit_retries2 = 3
-t1.packet_reordering = 3
-t1.delayed_acks_segments = 0
-t1.delayed_acks_timeout = 0
-t1.port_randomization = False
-t1.disable_path_mtu = False
-t1.window_scaling = False
-t1.selective_ack = False
-t1.time_wait_reuse = False
-t1.time_wait_recycle = False
-t1.time_wait_rfc1323_strict = False
-t1.packet_timestamps = False
-t1.explicit_congestion_notification = False
-t1.bic = 0
-t1.vegas_alpha = 2
-t1.rfc1337 = True
-t1.mem_low = 24756
-t1.maximum_wmem = 262144
-t1.westwood = 0
-t1.avoid_vegas_congestion = 0
-t1.maximum_rmem = 262144
-t1.orphan_retries = 0
-t1.maximum_time_wait_buckets = 1800
-t1.low_latency = 0
-t1.minimum_rmem = 4096
-t1.window_scale = 2
-t1.wmem_default = 262144
-t1.minimum_wmem = 4096
-t1.stdurg = False
-t1.maximum_syn_backlog = 1024
-t1.dsack = True
-t1.abort_on_overflow = True
-t1.fragment_reassembly_timer = 0
-t1.vegas_beta = 6
-t1.maximum_orphans = 8192
-t1.mem_pressure = 32768
-t1.moderate_receive_buffer = 0
-t1.no_metrics_save = True
-t1.retrans_collapse = True
-t1.rmem_default = 262144
-t1.mem_high = 49152
-t1.vegas_gamma = 2
-t1.fack = True
-t1.bic_low_window = 14
-t1.app_win = 31
-t1.keep_alive_probes = 9
-
-
-# t1.rmem_default = 65536
-# t1.transmit_buffer_size = 65536
-# t1.time_wait_recycle = False
-# t1.time_wait_rfc1323_strict = True
-# t1.keep_alive_time = 600
+t1.receive_buffer_size = 1111
+t1.transmit_buffer_size = 1112
+t1.retransmission_minimum_timeout = 100
+t1.retransmission_maximum_timeout = 1001
+t1.minimum_source_port = 100
+t1.maximum_source_port = 101
 
 (t2,) = d2.tcps.tcp(name="Tcp2")
 t2.ip_interface_name = ip2.name
-t2.time_wait_recycle = False
-t2.time_wait_rfc1323_strict = True
-t2.keep_alive_time = 600
+t2.receive_buffer_size = 2222
+t2.transmit_buffer_size = 2221
+t2.retransmission_minimum_timeout = 200
+t2.retransmission_maximum_timeout = 2002
+t2.minimum_source_port = 200
+t2.maximum_source_port = 202
+
 # (http_1,) = d1.https.http(name="HTTP1")
 # http_1.tcp_name = t1.name  # UDP configs can be mapped http.transport = udp_1.name
 # http_1.enable_tos = False

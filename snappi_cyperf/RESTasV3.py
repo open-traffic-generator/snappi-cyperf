@@ -887,6 +887,39 @@ class RESTasV3:
         )
         self.__sendPatch(apiPath, payload={"RxBuffer": value})
 
+    def set_client_tcp_profile(self, tcp_profile):
+        apiPath = "/api/v2/sessions/{}/config/config/TrafficProfiles/1/TrafficSettings/DefaultTransportProfile/ClientTcpProfile".format(
+            self.sessionID
+        )
+        self.__sendPatch(apiPath, tcp_profile)
+
+    def set_server_tcp_profile(self, tcp_profile):
+        apiPath = "/api/v2/sessions/{}/config/config/TrafficProfiles/1/TrafficSettings/DefaultTransportProfile/ServerTcpProfile".format(
+            self.sessionID
+        )
+        self.__sendPatch(apiPath, tcp_profile)
+
+    def get_client_tcp_profile(self):
+        apiPath = "/api/v2/sessions/{}/config/config/TrafficProfiles/1/TrafficSettings/DefaultTransportProfile/ClientTcpProfile".format(
+            self.sessionID
+        )
+        response = self.__sendGet(apiPath, 200).json()
+        return response
+
+    def get_server_tcp_profile(self):
+        apiPath = "/api/v2/sessions/{}/config/config/TrafficProfiles/1/TrafficSettings/DefaultTransportProfile/ServerTcpProfile".format(
+            self.sessionID
+        )
+        response = self.__sendGet(apiPath, 200).json()
+        return response
+
+    def get_config_config(self):
+        apiPath = "/api/v2/sessions/{}/config/config/TrafficProfiles/1/TrafficSettings/DefaultTransportProfile".format(
+            self.sessionID
+        )
+        response = self.__sendGet(apiPath, 200).json()
+        return response
+
     def set_client_transmit_buffer_size_attack_profile(self, value):
         apiPath = "/api/v2/sessions/{}/config/config/AttackProfiles/1/TrafficSettings/DefaultTransportProfile/ClientTcpProfile".format(
             self.sessionID
