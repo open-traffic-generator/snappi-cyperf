@@ -18,16 +18,18 @@ rest = RESTasV3(ipAddress="10.39.44.178")
 sys.path.insert(0, "/home/dipendu/otg/open_traffic_generator/snappi/artifacts/snappi")
 import snappi
 import snappi_cyperf.ixrestutils as http_transport
+from snappi_cyperf.ports import port
 from snappi_cyperf.interface import interfaces
+from snappi_cyperf.tcp import tcp_config
+from snappi_cyperf.http_config import http_config
+from snappi_cyperf.objectiveandtimeline import objectiveandtimeline
 
 # from snappi_cyperf.http_config import client_config
-from snappi_cyperf.tcp import tcp_config
 
 # from snappi_cyperf.http_server_config import server_config
 from snappi_cyperf.logger import setup_cyperf_logger
 from snappi_cyperf.common import Common
 from snappi_cyperf.exceptions import Snappil47Exception
-from snappi_cyperf.ports import port
 
 
 # from protocols import protocols
@@ -77,7 +79,8 @@ class Api(snappi.Api):
         self.interfaces = interfaces(self)
         self.tcp = tcp_config(self)
         self.common = Common()
-        # self.http_cl = client_config(self)
+        self.http = http_config(self)
+        self.objectiveandtimeline = objectiveandtimeline(self)
         # self.http_sr = server_config(self)
         self.port = port(self)
         self._log_level = (
@@ -135,8 +138,8 @@ class Api(snappi.Api):
             self._l47config = config
             self.interfaces.config(rest)
             self.tcp.config(rest)
-            # self.http_sr.config()
-            # self.http_cl.config()
+            self.http.config(rest)
+            self.objectiveandtimeline.config(rest)
             self.port.config(rest)
             # self._apply_config()
         except Exception as err:

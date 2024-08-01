@@ -913,9 +913,37 @@ class RESTasV3:
         response = self.__sendGet(apiPath, 200).json()
         return response
 
-    def get_config_config(self):
-        apiPath = "/api/v2/sessions/{}/config/config/TrafficProfiles/1/TrafficSettings/DefaultTransportProfile".format(
+    def set_client_http_profile(self, http_profile):
+        apiPath = "/api/v2/sessions/{}/config/config/TrafficProfiles/1/TrafficSettings/DefaultTransportProfile/ClientHTTPProfile".format(
             self.sessionID
+        )
+        self.__sendPatch(apiPath, http_profile)
+
+    def set_server_http_profile(self, http_profile):
+        apiPath = "/api/v2/sessions/{}/config/config/TrafficProfiles/1/TrafficSettings/DefaultTransportProfile/ServerHTTPProfile".format(
+            self.sessionID
+        )
+        self.__sendPatch(apiPath, http_profile)
+
+    def get_client_http_profile(self):
+        apiPath = "/api/v2/sessions/{}/config/config/TrafficProfiles/1/TrafficSettings/DefaultTransportProfile/ClientHTTPProfile".format(
+            self.sessionID
+        )
+        response = self.__sendGet(apiPath, 200).json()
+        return response
+
+    def get_server_http_profile(self):
+        apiPath = "/api/v2/sessions/{}/config/config/TrafficProfiles/1/TrafficSettings/DefaultTransportProfile/ServerHTTPProfile".format(
+            self.sessionID
+        )
+        response = self.__sendGet(apiPath, 200).json()
+        return response
+
+    def get_config_config(self):
+        apiPath = (
+            "/api/v2/sessions/{}/config/config/TrafficProfiles/1/Applications".format(
+                self.sessionID
+            )
         )
         response = self.__sendGet(apiPath, 200).json()
         return response
@@ -1957,6 +1985,13 @@ class RESTasV3:
         response = self.__sendGet(apiPath, 200, debug=False).json()
         return response
 
+    def get_application_actions_values(self, app_id, action_id):
+        apiPath = "/api/v2/sessions/{}/config/config/TrafficProfiles/1/Applications/{}/Tracks/1/Actions/{}/Params".format(
+            self.sessionID, app_id, action_id
+        )
+        response = self.__sendGet(apiPath, 200, debug=False).json()
+        return response
+
     def delete_application_action(self, app_id, action_id, tp_id=1):
         apiPath = "/api/v2/sessions/{}/config/config/TrafficProfiles/{}/Applications/{}/Tracks/1/Actions/{}".format(
             self.sessionID, tp_id, app_id, action_id
@@ -2008,11 +2043,31 @@ class RESTasV3:
         }
         self.__sendPatch(apiPath, payload)
 
-    def set_primary_objective(self, objective, tp_id=1):
+    def set_primary_objective(self, payload, tp_id=1):
         apiPath = "/api/v2/sessions/{}/config/config/TrafficProfiles/{}/ObjectivesAndTimeline/PrimaryObjective".format(
             self.sessionID, tp_id
         )
-        self.__sendPatch(apiPath, payload={"Type": objective, "Unit": ""})
+        self.__sendPatch(apiPath, payload)
+
+    def get_primary_objective(self, tp_id=1):
+        apiPath = "/api/v2/sessions/{}/config/config/TrafficProfiles/{}/ObjectivesAndTimeline/PrimaryObjective".format(
+            self.sessionID, tp_id
+        )
+        response = self.__sendGet(apiPath, 200, debug=False).json()
+        return response
+
+    def set_secondary_objective(self, payload, tp_id=1):
+        apiPath = "/api/v2/sessions/{}/config/config/TrafficProfiles/{}/ObjectivesAndTimeline/SecondaryObjective".format(
+            self.sessionID, tp_id
+        )
+        self.__sendPatch(apiPath, payload)
+
+    def get_secondary_objective(self, tp_id=1):
+        apiPath = "/api/v2/sessions/{}/config/config/TrafficProfiles/{}/ObjectivesAndTimeline/SecondaryObjective".format(
+            self.sessionID, tp_id
+        )
+        response = self.__sendGet(apiPath, 200, debug=False).json()
+        return response
 
     def add_primary_objective(self, objective, tp_id=1):
         apiPath = "/api/v2/sessions/{}/config/config/TrafficProfiles/{}/ObjectivesAndTimeline/PrimaryObjective".format(
@@ -2411,6 +2466,17 @@ class RESTasV3:
         self.__sendPatch(apiPath, payload={"UdpPort": udp_port})
 
     def __get_status_for_advance_timeline(self):
+        apiPath = f"/api/v2/sessions/{self.sessionID}/config/config/TrafficProfiles/1/ObjectivesAndTimeline/PrimaryObjective/Timeline"
+        result = self.__sendGet(apiPath, 200)
+        return result.json()
+
+    def set_primary_timeline(self, payload, segment_id, tp_id=1):
+        apiPath = "/api/v2/sessions/{}/config/config/TrafficProfiles/{}/ObjectivesAndTimeline/PrimaryObjective/Timeline/{}".format(
+            self.sessionID, tp_id, segment_id
+        )
+        self.__sendPatch(apiPath, payload)
+
+    def get_primary_timeline(self):
         apiPath = f"/api/v2/sessions/{self.sessionID}/config/config/TrafficProfiles/1/ObjectivesAndTimeline/PrimaryObjective/Timeline"
         result = self.__sendGet(apiPath, 200)
         return result.json()

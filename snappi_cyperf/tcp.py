@@ -34,7 +34,12 @@ class tcp_config(Common):
 
     def _update_tcp(self, rest):
         """Add any scenarios to the api server that do not already exist"""
-        response = rest.add_application("TCP App")
+        app_id = rest.add_application("TCP App")
+        response = rest.get_application_actions(app_id)
+        print("TCP Actions :- ", response)
+        action_id = response[-1]["id"]
+        response = rest.get_application_actions_values(app_id, action_id)
+        print("TCP Actions values :- ", response)
         client = True
         for device in self._devices_config:
             #

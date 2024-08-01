@@ -56,7 +56,6 @@ ip1.step = "0.0.0.1"
 ip1.count = 1
 ip1.max_count = 1
 ip1.prefix = 16
-ip1.ip_range_id = 1
 
 (ip2,) = e2.ipv4_addresses.ipv4(name="e2.ipv4")
 ip2.address = "173.173.173.30"
@@ -65,7 +64,6 @@ ip2.step = "0.0.0.2"
 ip2.count = 2
 ip2.max_count = 2
 ip2.prefix = 12
-ip2.ip_range_id = 1
 
 # TCP/UDP configs
 
@@ -87,7 +85,7 @@ t2.retransmission_maximum_timeout = 2002
 t2.minimum_source_port = 200
 t2.maximum_source_port = 202
 
-# (http_1,) = d1.https.http(name="HTTP1")
+(http_1,) = d1.https.http(name="HTTP1")
 # http_1.tcp_name = t1.name  # UDP configs can be mapped http.transport = udp_1.name
 # http_1.enable_tos = False
 # http_1.priority_flow_control_class = "v10"
@@ -105,10 +103,12 @@ t2.maximum_source_port = 202
 # http_1.enable_integrity_check_support = False
 # http_1.type_of_service = 0
 # http_1.high_perf_with_simulated_user = False
-# (http_client,) = http_1.clients.client()
+http_1.profile = "Chrome"
+http_1.version = "HTTP11"
+http_1.connection_persistence = "ConnectionPersistenceStandard"
+(http_client,) = http_1.clients.client()
 # http_client.cookie_jar_size = 100
-# http_client.version = "1"
-# http_client.cookie_reject_probability = True
+http_client.cookie_reject_probability = False
 # http_client.enable_cookie_support = False
 # http_client.command_timeout = 600
 # http_client.command_timeout_ms = 0
@@ -117,7 +117,7 @@ t2.maximum_source_port = 202
 # http_client.max_sessions = 3
 # http_client.max_streams = 1
 # http_client.max_pipeline = 1
-# http_client.max_persistent_requests = 1
+http_client.max_persistent_requests = 1
 # http_client.exact_transactions = 0
 # http_client.follow_http_redirects = False
 # http_client.enable_decompress_support = False
@@ -134,7 +134,6 @@ t2.maximum_source_port = 202
 # http_client.enable_consecutive_ips_per_session = False
 # http_client.enable_achieve_cc_first = False
 # http_client.enable_traffic_distribution_for_cc = False
-# http_client.browser_emulation_name = "Browser1"
 
 # http_1.client(endpoints_allow_inbound)
 
@@ -143,7 +142,11 @@ t2.maximum_source_port = 202
 # get1.destination = "10.0.10.1" #real http server ip or emulated http object  get1.destination = "http2:80"
 # for http server emulation
 # get1.destination = http_2.name
-# (http_2,) = d2.https.http(name="HTTP2")
+
+(http_2,) = d2.https.http(name="HTTP2")
+# http_2.profile = "Apache"
+# http_2.version = "HTTP11"
+# http_2.connection_persistence = 2
 # http_2.tcp_name = t2.name  # UDP configs can be mapped http.transport = udp_2.name
 # http_2.enable_tos = False
 # http_2.priority_flow_control_class = "v10"
@@ -164,7 +167,10 @@ t2.maximum_source_port = 202
 #     False  # UDP configs can be mapped http.transport = udp_2.name
 # )
 # # http_2.server(endpoints_allow_outbound)
-# (http_server,) = http_2.servers.server()
+http_2.profile = "Apache"
+http_2.version = "HTTP11"
+http_2.connection_persistence = "ConnectionPersistenceEnabled"
+(http_server,) = http_2.servers.server()
 # http_server.rst_timeout = 100
 # http_server.enable_http2 = False
 # http_server.port = 80
@@ -176,6 +182,7 @@ t2.maximum_source_port = 202
 # http_server.url_page_size = 1024
 # http_server.enable_chunk_encoding = False
 # http_server.enable_md5_checksum = False
+
 
 # (get_a, delete_a) = http_client.methods.method().method()
 # (get1,) = get_a.get.get()
@@ -191,29 +198,22 @@ t2.maximum_source_port = 202
 # delete1.destination = "Traffic2_HTTPServer1:80"
 # delete1.page = "./1b.html"
 
-# (tp1,) = config.trafficprofile.trafficprofile()
-# # traffic_profile = config.TrafficProfiles.TrafficProfile(name = "traffic_profile_1")
-# tp1.app = [
-#     http_1.name,
-#     http_2.name,
-# ]  # traffic_profile_cps.app - "app" using it for reference can be some generic name for traffic profile on which traffic has to flow
-
-# tp1.objective_type = ["CPS", "simulation_user"]
-# tp1.objective_value = [100, 100]
-# (segment1, segment2) = tp1.segment.segment().segment()
-# segment1.name = "Linear segment1"
-# segment1.start = 0
-# segment1.duration = 10
-# segment1.rate = 10
-# segment1.target = 100
-# segment2.name = "Linear segment2"
-# segment2.start = 0
-# segment2.duration = 10
-# segment2.rate = 10
-# segment2.target = 100
-# tp1.timeline = [segment1.name, segment2.name]
-# obj1 = tp1.objectives.concurrent_connections
-# obj1.ramp_down_time = 100
+(tp1,) = config.trafficprofile.trafficprofile()
+(segment1, segment2) = tp1.segment.segment().segment()
+segment1.name = "Linear segment1"
+segment1.duration = 40
+segment1.enable_ramp_up = True
+segment1.ramp_down_time = 50
+segment1.ramp_down_value = 100
+segment1.enable_ramp_down = True
+segment1.ramp_up_time = 60
+segment1.ramp_up_value = 100
+segment2.name = "Linear segment2"
+segment2.duration = 70
+tp1.timeline = [segment1.name, segment2.name]
+tp1.objective_type = ["Connections per second", "Simulated users"]
+tp1.objective_value = [100, 200]
+(obj1, obj2) = tp1.objectives.objective().objective()
 
 print("In test before set_config")
 response = api.set_config(config)
