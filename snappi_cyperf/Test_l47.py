@@ -75,6 +75,9 @@ t1.retransmission_minimum_timeout = 100
 t1.retransmission_maximum_timeout = 1001
 t1.minimum_source_port = 100
 t1.maximum_source_port = 101
+t1.data_content_source = "SyntheticData"
+t1.data_content_value = "30000"
+t1.direction = "client_to_server"
 
 (t2,) = d2.tcps.tcp(name="Tcp2")
 t2.ip_interface_name = ip2.name

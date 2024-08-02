@@ -1985,6 +1985,14 @@ class RESTasV3:
         response = self.__sendGet(apiPath, 200, debug=False).json()
         return response
 
+    def set_application_actions_values(
+        self, payload, app_id, action_id, param_id, tp_id=1
+    ):
+        apiPath = "/api/v2/sessions/{}/config/config/TrafficProfiles/{}/Applications/{}/Tracks/1/Actions/{}/Params/{}".format(
+            self.sessionID, tp_id, app_id, action_id, param_id
+        )
+        self.__sendPatch(apiPath, payload)
+
     def get_application_actions_values(self, app_id, action_id):
         apiPath = "/api/v2/sessions/{}/config/config/TrafficProfiles/1/Applications/{}/Tracks/1/Actions/{}/Params".format(
             self.sessionID, app_id, action_id
