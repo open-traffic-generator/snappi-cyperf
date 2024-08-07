@@ -22,7 +22,7 @@ e1.connection.port_name = "p1"
 e1.mac = "01:02:03:04:05:06"
 e1.step = "00:00:00:00:00:01"
 e1.count = 1
-e1.max_count = 100
+# e1.max_count = 100
 e1.mtu = 1488
 
 (e2,) = d2.ethernets.ethernet(name="d2.e2")
@@ -30,7 +30,7 @@ e2.connection.port_name = "p2"
 e2.mac = "01:02:03:04:06:06"
 e2.step = "00:00:00:00:00:01"
 e2.count = 2
-e2.max_count = 100
+# e2.max_count = 100
 e2.mtu = 1488
 
 (vlan1,) = e1.vlans.vlan(name="vlan1")
@@ -54,7 +54,7 @@ ip1.address = "10.0.0.10"
 ip1.gateway = "10.0.0.1"
 ip1.step = "0.0.0.1"
 ip1.count = 1
-ip1.max_count = 1
+# ip1.max_count = 1
 ip1.prefix = 16
 
 (ip2,) = e2.ipv4_addresses.ipv4(name="e2.ipv4")
@@ -62,7 +62,7 @@ ip2.address = "10.0.0.20"
 ip2.gateway = "10.0.0.1"
 ip2.step = "0.0.0.1"
 ip2.count = 1
-ip2.max_count = 1
+# ip2.max_count = 1
 ip2.prefix = 16
 
 # TCP/UDP configs
@@ -75,9 +75,9 @@ t1.retransmission_minimum_timeout = 100
 t1.retransmission_maximum_timeout = 1001
 t1.minimum_source_port = 100
 t1.maximum_source_port = 101
-t1.data_content_source = "SyntheticData"
-t1.data_content_value = "30000"
-t1.direction = "client_to_server"
+# t1.data_content_source = "SyntheticData"
+# t1.data_content_value = "30000"
+# t1.direction = "client_to_server"
 
 (t2,) = d2.tcps.tcp(name="Tcp2")
 t2.ip_interface_name = ip2.name
@@ -122,12 +122,12 @@ http_2.connection_persistence = "ConnectionPersistenceEnabled"
 (segment1, segment2) = tp1.segment.segment().segment()
 segment1.name = "Linear segment1"
 segment1.duration = 40
-segment1.enable_ramp_up = True
-segment1.ramp_down_time = 50
-segment1.ramp_down_value = 100
-segment1.enable_ramp_down = True
-segment1.ramp_up_time = 60
-segment1.ramp_up_value = 100
+# segment1.enable_ramp_up = True
+# segment1.ramp_down_time = 50
+# segment1.ramp_down_value = 100
+# segment1.enable_ramp_down = True
+# segment1.ramp_up_time = 60
+# segment1.ramp_up_value = 100
 segment2.name = "Linear segment2"
 segment2.duration = 70
 tp1.timeline = [segment1.name, segment2.name]

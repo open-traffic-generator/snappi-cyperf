@@ -139,7 +139,7 @@ class Api(snappi.Api):
             self.interfaces.config(rest)
             self.tcp.config(rest)
             self.http.config(rest)
-            self.objectiveandtimeline.config(rest)
+            # self.objectiveandtimeline.config(rest)
             self.port.config(rest)
             # self._apply_config()
         except Exception as err:

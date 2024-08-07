@@ -60,15 +60,15 @@ class tcp_config(Common):
             payload["Reordering"] = False
             if client:
                 rest.set_client_tcp_profile(payload)
-                self._update_tcp_properties(tcp, rest, app_id, action_id)
+                # self._update_tcp_properties(tcp, rest, app_id, action_id)
             else:
                 rest.set_server_tcp_profile(payload)
 
-    def _update_tcp_properties(self, tcp, rest, app_id, action_id):
-        payload_data_content = {}
-        payload_data_content["Source"] = tcp.data_content_source
-        payload_data_content["Value"] = tcp.data_content_value
-        rest.set_application_actions_values(payload_data_content, app_id, action_id, 0)
-        payload_direction = {}
-        payload_direction["Value"] = tcp.direction
-        rest.set_application_actions_values(payload_direction, app_id, action_id, 1)
+    # def _update_tcp_properties(self, tcp, rest, app_id, action_id):
+    #     payload_data_content = {}
+    #     payload_data_content["Source"] = tcp.data_content_source
+    #     payload_data_content["Value"] = tcp.data_content_value
+    #     rest.set_application_actions_values(payload_data_content, app_id, action_id, 0)
+    #     payload_direction = {}
+    #     payload_direction["Value"] = tcp.direction
+    #     rest.set_application_actions_values(payload_direction, app_id, action_id, 1)
