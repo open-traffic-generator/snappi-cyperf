@@ -160,32 +160,12 @@ class Api(snappi.Api):
     def set_control_state(self, config):
         try:
             if config.app.state == "start":
-                url = "%scyperf/test/operations/runTest" % (self._cyperf)
-                payload = {}
-
-                reply = self._request("POST", url, payload, option=1)
-                if not reply.ok:
-                    raise Exception(reply.text)
-                # self._wait_for_action_to_finish(reply, url)
-                msg = (
-                    "Traffic are in running state. "
-                    "Please stop those using set_control_state"
-                )
-                # self.add_error(msg)
-                self.warning(msg)
+                self.start_test(rest)
 
             elif config.app.state == "stop":
-                url = "%s/cyperf/test/operations/gracefulStopRun" % (self._cyperf)
-                payload = {}
-                reply = self._request("POST", url, payload, option=1)
-                self._wait_for_action_to_finish(reply, url)
+                self.stop_test(rest)
             elif config.app.state == "abort":
-                url = "%s/cyperf/test/operations/abortAndReleaseConfigWaitFinish" % (
-                    self._cyperf
-                )
-                payload = {}
-                reply = self._request("POST", url, payload, option=1)
-                self._wait_for_action_to_finish(reply, url)
+                self.abort_test(rest)
         except Exception as err:
             self.logger.info(f"error:{err}")
             raise Snappil47Exception(err)
@@ -215,19 +195,23 @@ class Api(snappi.Api):
             raise Exception(reply.text)
         self._wait_for_action_to_finish(reply, url)
 
-    def run_test(self):
+    def start_test(self, rest):
         """
         start test
         """
-        url = "%s/cyperf/test/operations/applyConfiguration" % (self._cyperf)
-        payload = {}
-        reply = self._request("POST", url, payload, option=1)
-        self._wait_for_action_to_finish(reply, url)
-        url = "%s/cyperf/test/operations/runTest" % (self._cyperf)
-        payload = {}
-        reply = self._request("POST", url, payload, option=1)
-        self._wait_for_action_to_finish(reply, url)
-        return self.get_current_state()
+        rest.start_test()
+
+    def stop_test(self, rest):
+        """
+        stop test
+        """
+        rest.stop_test()
+
+    def abort_test(self, rest):
+        """
+        abort test
+        """
+        rest.abort_test()
 
     def get_current_state(self):
         """
@@ -298,7 +282,8 @@ class Api(snappi.Api):
         #                 raise Exception(error_msg)
         #         else:
         #             time.sleep(0.1)
-        self.configID = "appsec-appmix-and-attack"
+        # self.configID = "appsec-appmix-and-attack"
+        self.configID = "appsec-appmix"
         response = rest.create_session(self.configID)
         if response:
             self.session_id = response.json()[0]["id"]
