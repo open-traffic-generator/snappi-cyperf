@@ -1024,6 +1024,13 @@ class RESTasV3:
         )
         self.__sendPatch(apiPath, payload={"minAgents": min_agents})
 
+    def add_eth_range(self, network_segment=1):
+        apiPath = "/api/v2/sessions/{}/config/config/NetworkProfiles/1/IPNetworkSegment".format(
+            self.sessionID
+        )
+        response = self.__sendPost(apiPath, payload={}).json()
+        return response[-1]["id"]
+
     def add_ip_range(self, network_segment=1):
         apiPath = "/api/v2/sessions/{}/config/config/NetworkProfiles/1/IPNetworkSegment/{}/IPRanges".format(
             self.sessionID, network_segment
@@ -1154,6 +1161,16 @@ class RESTasV3:
             apiPath,
             payload,
         )
+
+    def get_eth_range(
+        self,
+        network_segment=1,
+    ):
+        apiPath = "/api/v2/sessions/{}/config/config/NetworkProfiles/1/IPNetworkSegment/{}".format(
+            self.sessionID, network_segment
+        )
+        response = self.__sendGet(apiPath, 200).json()
+        return response
 
     def set_ip_range(
         self,
@@ -1945,6 +1962,23 @@ class RESTasV3:
         )
         response = self.__sendPost(
             apiPath, payload={"ExternalResourceURL": app_id}
+        ).json()
+        return response[-1]["id"]
+
+    def get_application_profile(self, tp_id=1):
+        apiPath = "/api/v2/sessions/{}/config/config/TrafficProfiles/{}".format(
+            self.sessionID, tp_id
+        )
+        response = self.__sendGet(apiPath, 200, debug=False).json()
+        return response
+
+    # Not working need to check
+    def add_application_profile(self, tp_id=1):
+        apiPath = "/api/v2/sessions/{}/config/config/TrafficProfiles".format(
+            self.sessionID
+        )
+        response = self.__sendPost(
+            apiPath, payload={"id": 1, "Active": True, "Name": "Application Profile"}
         ).json()
         return response[-1]["id"]
 

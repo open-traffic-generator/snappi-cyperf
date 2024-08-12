@@ -283,6 +283,7 @@ class Api(snappi.Api):
         #         else:
         #             time.sleep(0.1)
         # self.configID = "appsec-appmix-and-attack"
+        # self.configID = "appsec-empty-config"
         self.configID = "appsec-appmix"
         response = rest.create_session(self.configID)
         if response:
