@@ -11,14 +11,14 @@ config = api.config()
 # port_1_ip = config.ports.port(name="p1", location="10.39.44.120")[-1]
 # port_2_ip = config.ports.port(name="p2", location="10.39.44.195")[-1]
 
-port_1_ip = config.ports.port(name="p1", location="10.39.44.147")[-1]
-port_2_ip = config.ports.port(name="p2", location="10.39.44.190")[-1]
+tx = config.ports.port(name="tx", location="10.39.44.147")[-1]
+rx = config.ports.port(name="rx", location="10.39.44.190")[-1]
 # port_1_tag = config.ports.port(name="p1", location="user:port1")[-1]
 # port_2_tag = config.ports.port(name="p2", location="user:port2")[-1]
 
 (d1, d2) = config.devices.device(name="d1").device(name="d2")
 (e1,) = d1.ethernets.ethernet(name="d1.e1")
-e1.connection.port_name = "p1"
+e1.connection.port_name = "tx"
 e1.mac = "01:02:03:04:05:06"
 e1.step = "00:00:00:00:00:01"
 e1.count = 1
@@ -26,7 +26,7 @@ e1.count = 1
 e1.mtu = 1488
 
 (e2,) = d2.ethernets.ethernet(name="d2.e2")
-e2.connection.port_name = "p2"
+e2.connection.port_name = "rx"
 e2.mac = "01:02:03:04:06:06"
 e2.step = "00:00:00:00:00:01"
 e2.count = 2

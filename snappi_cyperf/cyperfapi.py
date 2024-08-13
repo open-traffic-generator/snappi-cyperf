@@ -14,8 +14,7 @@ rest = RESTasV3(ipAddress="10.39.44.178")
 # rest = RESTasV3(ipAddress="10.39.47.88")
 
 # import sys
-# sys.path.append("C:\\Users\\waseebai\\Documents\\GitHub\\snappi\\artifacts\\snappi")
-sys.path.insert(0, "/home/dipendu/otg/open_traffic_generator/snappi/artifacts/snappi")
+# sys.path.insert(0, "/home/dipendu/otg/open_traffic_generator/snappi/artifacts/snappi")
 import snappi
 import snappi_cyperf.ixrestutils as http_transport
 from snappi_cyperf.ports import port

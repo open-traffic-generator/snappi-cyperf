@@ -3,7 +3,7 @@ from flask import Flask, request, jsonify, Response
 # from exceptions import Snappil47Exception
 import sys
 
-sys.path.insert(0, "/home/dipendu/otg/open_traffic_generator/snappi/artifacts/snappi")
+# sys.path.insert(0, "/home/dipendu/otg/open_traffic_generator/snappi/artifacts/snappi")
 
 import snappi
 
@@ -13,7 +13,7 @@ global CONFIG
 CONFIG = snappi.Config()
 CS = snappi.ControlState()
 GM = snappi.MetricsRequest()
-sys.path.append("/home/dipendu/otg/open_traffic_generator/snappi-cyperf")
+# sys.path.append("/home/dipendu/otg/open_traffic_generator/snappi-cyperf")
 from snappi_cyperf import cyperfapi
 
 API = cyperfapi.Api(host="10.39.44.178", version="10.00.0.152")

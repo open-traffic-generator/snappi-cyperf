@@ -2,7 +2,7 @@
 import sys
 import traceback
 
-sys.path.insert(0, "/home/dipendu/otg/open_traffic_generator/snappi/artifacts/snappi")
+# sys.path.insert(0, "/home/dipendu/otg/open_traffic_generator/snappi/artifacts/snappi")
 import snappi
 
 
