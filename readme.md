@@ -42,7 +42,7 @@ config = api.config()
 # port location is agent-ip
 tx = config.ports.port(name="tx", location="10.39.44.147")[-1]
 rx = config.ports.port(name="rx", location="10.39.44.190")[-1]
-
+# configure layer 1 properties
 (d1, d2) = config.devices.device(name="d1").device(name="d2")
 (e1,) = d1.ethernets.ethernet(name="d1.e1")
 e1.connection.port_name = "tx"
