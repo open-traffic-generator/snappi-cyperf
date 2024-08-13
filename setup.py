@@ -20,7 +20,7 @@ setuptools.setup(
     long_description=long_description,
     long_description_content_type="text/markdown",
     url="https://github.com/open-traffic-generator/snappi-cyperf",
-    author="dipeghos",
+    author="dipendughosh",
     author_email="dipendu.ghosh@keysight.com",
     license="MIT",
     classifiers=[
