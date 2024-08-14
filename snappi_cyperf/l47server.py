@@ -16,7 +16,12 @@ GM = snappi.MetricsRequest()
 # sys.path.append("/home/dipendu/otg/open_traffic_generator/snappi-cyperf")
 from snappi_cyperf import cyperfapi
 
-API = cyperfapi.Api(host="10.39.44.178", version="10.00.0.152")
+API = cyperfapi.Api(
+    host="10.39.44.178",
+    version="10.00.0.152",
+    username="admin",
+    password="CyPerf&Keysight#1",
+)
 # API = cyperfapi.Api(host="10.39.47.88", version="10.00.0.152")
 
 

@@ -9,10 +9,6 @@ from collections import namedtuple
 
 from RESTasV3 import RESTasV3
 
-# mdw_address = sys.argv[1]
-rest = RESTasV3(ipAddress="10.39.44.178")
-# rest = RESTasV3(ipAddress="10.39.47.88")
-
 # import sys
 # sys.path.insert(0, "/home/dipendu/otg/open_traffic_generator/snappi/artifacts/snappi")
 import snappi
@@ -43,8 +39,8 @@ class Api(snappi.Api):
         self,
         host,
         version,
-        username=rest.username,
-        password=rest.password,
+        username,
+        password,
         gateway_port=8080,
         log_level="info",
         **kwargs,
@@ -135,11 +131,11 @@ class Api(snappi.Api):
             self._connect()
             # self._ip_list = self.common.get_protocol_ip(config)
             self._l47config = config
-            self.interfaces.config(rest)
-            self.tcp.config(rest)
-            self.http.config(rest)
-            # self.objectiveandtimeline.config(rest)
-            self.port.config(rest)
+            self.interfaces.config(self.rest)
+            self.tcp.config(self.rest)
+            self.http.config(self.rest)
+            # self.objectiveandtimeline.config(self.rest)
+            self.port.config(self.rest)
             # self._apply_config()
         except Exception as err:
             self.logger.info(f"error:{err}")
@@ -159,12 +155,12 @@ class Api(snappi.Api):
     def set_control_state(self, config):
         try:
             if config.app.state == "start":
-                self.start_test(rest)
+                self.start_test(self.rest)
 
             elif config.app.state == "stop":
-                self.stop_test(rest)
+                self.stop_test(self.rest)
             elif config.app.state == "abort":
-                self.abort_test(rest)
+                self.abort_test(self.rest)
         except Exception as err:
             self.logger.info(f"error:{err}")
             raise Snappil47Exception(err)
@@ -284,7 +280,7 @@ class Api(snappi.Api):
         # self.configID = "appsec-appmix-and-attack"
         # self.configID = "appsec-empty-config"
         self.configID = "appsec-appmix"
-        response = rest.create_session(self.configID)
+        response = self.rest.create_session(self.configID)
         if response:
             self.session_id = response.json()[0]["id"]
             print("Config successfully opened, session ID: {}".format(self.session_id))
