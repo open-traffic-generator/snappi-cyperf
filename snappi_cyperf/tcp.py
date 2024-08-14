@@ -1,8 +1,8 @@
 import json
 import re
 import time
-from timer import Timer
-from common import Common
+from snappi_cyperf.timer import Timer
+from snappi_cyperf.common import Common
 
 
 class tcp_config(Common):

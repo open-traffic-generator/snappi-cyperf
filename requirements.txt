@@ -8,3 +8,10 @@ requests
 black; python_version > '3.6'
 PyYAML
 flask
+urllib3
+simplejson
+requests
+tabulate
+pandas
+requests_toolbelt
+timer

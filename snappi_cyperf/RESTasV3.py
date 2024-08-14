@@ -11,20 +11,15 @@ from zipfile import ZipFile
 from datetime import datetime
 from requests_toolbelt import MultipartEncoder
 
-sys.path.insert(0, os.path.join(os.path.dirname(__file__)))
-
-from resources.configuration import WAP_USERNAME, WAP_PASSWORD, WAP_CLIENT_ID
-
 
 class RESTasV3:
 
-    def __init__(
-        self, ipAddress, username=WAP_USERNAME, password=WAP_PASSWORD, verify=True
-    ):
+    def __init__(self, ipAddress, username, password, client_id, verify=True):
         print("In RESTasV3 init")
         self.ipAddress = ipAddress
         self.username = username
         self.password = password
+        self.client_id = client_id
         self.verify = verify
         self.connect_to_mdw()
         self.startTime = None
@@ -231,7 +226,7 @@ class RESTasV3:
             "username": self.username,
             "password": self.password,
             "grant_type": "password",
-            "client_id": WAP_CLIENT_ID,
+            "client_id": self.client_id,
         }
 
         response = self.__sendPost(apiPath, payload, customHeaders=headers)

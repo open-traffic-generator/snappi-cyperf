@@ -7,11 +7,10 @@ import logging
 # import ixrestutils as http_transport
 from collections import namedtuple
 
-from RESTasV3 import RESTasV3
-
 # import sys
 # sys.path.insert(0, "/home/dipendu/otg/open_traffic_generator/snappi/artifacts/snappi")
 import snappi
+from snappi_cyperf.RESTasV3 import RESTasV3
 import snappi_cyperf.ixrestutils as http_transport
 from snappi_cyperf.ports import port
 from snappi_cyperf.interface import interfaces
@@ -30,6 +29,11 @@ from snappi_cyperf.exceptions import Snappil47Exception
 # from protocols import protocols
 # from snappi_cyperf.chassis import chassis
 # from stats import stats
+
+WAP_USERNAME = "admin"
+WAP_PASSWORD = "CyPerf&Keysight#1"
+WAP_CLIENT_ID = "clt-wap"
+TOKEN_ENDPOINT = "/auth/realms/keysight/protocol/openid-connect/token"
 
 
 class Api(snappi.Api):
@@ -56,6 +60,12 @@ class Api(snappi.Api):
         super().__init__(**kwargs)
         #    host='https://127.0.0.1:11009' if host is None else host
         # )
+        self.rest = RESTasV3(
+            ipAddress=host,
+            username=WAP_USERNAME,
+            password=WAP_PASSWORD,
+            client_id=WAP_CLIENT_ID,
+        )
         self._host = host
         self._address, self._port = self._get_addr_port(self._host)
         self._username = username
@@ -132,8 +142,8 @@ class Api(snappi.Api):
             # self._ip_list = self.common.get_protocol_ip(config)
             self._l47config = config
             self.interfaces.config(self.rest)
-            self.tcp.config(self.rest)
-            self.http.config(self.rest)
+            # self.tcp.config(self.rest)
+            # self.http.config(self.rest)
             # self.objectiveandtimeline.config(self.rest)
             self.port.config(self.rest)
             # self._apply_config()

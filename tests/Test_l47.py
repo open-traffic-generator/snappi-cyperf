@@ -12,7 +12,7 @@ Validate,
 import snappi
 
 # host is Cyperf API Server
-api = snappi.api(location="https://localhost:443", ext="cyperf")
+api = snappi.api(location="http://127.0.0.1:5000", verify=False)
 config = api.config()
 # port location is agent-ip
 tx = config.ports.port(name="tx", location="10.39.44.147")[-1]
