@@ -1,28 +1,3 @@
-# snappi extension for Cyperf
-
-[![license](https://img.shields.io/badge/license-MIT-green.svg)](https://en.wikipedia.org/wiki/MIT_License)
-[![Project Status: Active – The project has reached a stable, usable state and is being actively developed.](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
-[![Build](https://github.com/open-traffic-generator/snappi-cyperf/workflows/Build/badge.svg)](https://github.com/open-traffic-generator/snappi-cyperf/actions)
-[![pypi](https://img.shields.io/pypi/v/snappi_cyperf.svg)](https://pypi.org/project/snappi_cyperf)
-[![python](https://img.shields.io/pypi/pyversions/snappi_cyperf.svg)](https://pypi.python.org/pypi/snappi_cyperf)
-[![Total alerts](https://img.shields.io/lgtm/alerts/g/open-traffic-generator/snappi-cyperf.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/open-traffic-generator/snappi-cyperf/alerts/)
-[![Language grade: Python](https://img.shields.io/lgtm/grade/python/g/open-traffic-generator/snappi-cyperf.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/open-traffic-generator/snappi-cyperf/context:python)
-[![downloads](https://pepy.tech/badge/snappi-cyperf)](https://pepy.tech/project/snappi-cyperf)
-
-This extension allows executing tests written using [snappi](https://github.com/open-traffic-generator/snappi) against  
-Cyperf, (one of) Keysight's implementation of [Open Traffic Generator](https://github.com/open-traffic-generator/models/releases).
-
-> The repository is under active development.
-
-## Install on a client
-
-```sh
-python -m pip install --upgrade "snappi[cyperf]"
-```
-
-## Start scripting
-
-```python
 import sys
 
 """
@@ -37,12 +12,12 @@ Validate,
 import snappi
 
 # host is Cyperf API Server
-api = snappi.api(location="https://localhost:443", ext="cyperf")
+api = snappi.api(location="http://127.0.0.1:5000", verify=False)
 config = api.config()
 # port location is agent-ip
 tx = config.ports.port(name="tx", location="10.39.44.147")[-1]
 rx = config.ports.port(name="rx", location="10.39.44.190")[-1]
-# configure layer 1 properties
+
 (d1, d2) = config.devices.device(name="d1").device(name="d2")
 (e1,) = d1.ethernets.ethernet(name="d1.e1")
 e1.connection.port_name = "tx"
@@ -145,4 +120,3 @@ response1 = api.set_control_state(cs)
 print(response1)
 cs.app.state = "stop"  # cs.app.state.START
 api.set_control_state(cs)
-
