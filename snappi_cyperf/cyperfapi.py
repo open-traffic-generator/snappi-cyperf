@@ -142,8 +142,8 @@ class Api(snappi.Api):
             # self._ip_list = self.common.get_protocol_ip(config)
             self._l47config = config
             self.interfaces.config(self.rest)
-            # self.tcp.config(self.rest)
-            # self.http.config(self.rest)
+            self.tcp.config(self.rest)
+            self.http.config(self.rest)
             # self.objectiveandtimeline.config(self.rest)
             self.port.config(self.rest)
             # self._apply_config()
