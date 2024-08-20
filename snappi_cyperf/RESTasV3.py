@@ -1181,6 +1181,17 @@ class RESTasV3:
             payload,
         )
 
+    def get_ip_range(
+        self,
+        network_segment=1,
+        ip_range=1,
+    ):
+        apiPath = "/api/v2/sessions/{}/config/config/NetworkProfiles/1/IPNetworkSegment/{}/IPRanges/{}".format(
+            self.sessionID, network_segment, ip_range
+        )
+        response = self.__sendGet(apiPath, 200).json()
+        return response
+
     def set_ip_range_innervlan_range(
         self,
         payload,
