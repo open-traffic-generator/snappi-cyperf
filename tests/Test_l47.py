@@ -109,9 +109,7 @@ tp1.objective_type = ["Connections per second", "Simulated users"]
 tp1.objective_value = [100, 200]
 (obj1, obj2) = tp1.objectives.objective().objective()
 
-print("In test before set_config")
 response = api.set_config(config)
-print("In test after set_config")
 print(response)
 api.close()
 
