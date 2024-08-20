@@ -8,6 +8,7 @@ Configure a raw TCP flow with,
 Validate,
 - frames transmitted and received for configured flow is as expected
 """
+sys.path.insert(0, "/home/dipendu/otg/open_traffic_generator/snappi/artifacts/snappi")
 
 import snappi
 
@@ -17,7 +18,7 @@ config = api.config()
 # port location is agent-ip
 tx = config.ports.port(name="tx", location="10.39.44.147")[-1]
 rx = config.ports.port(name="rx", location="10.39.44.190")[-1]
-
+# configure layer 1 properties
 (d1, d2) = config.devices.device(name="d1").device(name="d2")
 (e1,) = d1.ethernets.ethernet(name="d1.e1")
 e1.connection.port_name = "tx"
@@ -34,8 +35,8 @@ e2.count = 2
 e2.mtu = 1488
 
 (vlan1,) = e1.vlans.vlan(name="vlan1")
-vlan1.id = 1
-vlan1.priority = 1
+vlan1.id = 181
+vlan1.priority = 0
 vlan1.tpid = "x8100"
 vlan1.count = 1
 vlan1.step = 1
@@ -43,7 +44,7 @@ vlan1.per_count = 1
 
 (vlan2,) = e2.vlans.vlan(name="vlan2")
 vlan2.id = 1
-vlan2.priority = 1
+vlan2.priority = 0
 vlan2.tpid = "x8100"
 vlan2.count = 1
 vlan2.step = 1
@@ -67,21 +68,21 @@ ip2.prefix = 16
 
 (t1,) = d1.tcps.tcp(name="Tcp1")
 t1.ip_interface_name = ip1.name
-t1.receive_buffer_size = 1111
-t1.transmit_buffer_size = 1112
+t1.receive_buffer_size = 4096
+t1.transmit_buffer_size = 4096
 t1.retransmission_minimum_timeout = 100
-t1.retransmission_maximum_timeout = 1001
-t1.minimum_source_port = 100
-t1.maximum_source_port = 101
+t1.retransmission_maximum_timeout = 3200
+t1.minimum_source_port = 1024
+t1.maximum_source_port = 65535
 
 (t2,) = d2.tcps.tcp(name="Tcp2")
 t2.ip_interface_name = ip2.name
-t2.receive_buffer_size = 2222
-t2.transmit_buffer_size = 2221
-t2.retransmission_minimum_timeout = 200
-t2.retransmission_maximum_timeout = 2002
-t2.minimum_source_port = 200
-t2.maximum_source_port = 202
+t2.receive_buffer_size = 4096
+t2.transmit_buffer_size = 4096
+t2.retransmission_minimum_timeout = 100
+t2.retransmission_maximum_timeout = 3200
+t2.minimum_source_port = 1024
+t2.maximum_source_port = 65535
 
 (http_1,) = d1.https.http(name="HTTP1")
 http_1.profile = "Chrome"

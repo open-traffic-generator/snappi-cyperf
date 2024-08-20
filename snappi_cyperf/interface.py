@@ -17,7 +17,6 @@ class interfaces(object):
         "mac": "MacStart",
         "step": "MacIncr",
         "count": "Count",
-        "max_count": "maxCountPerAgent",
     }
 
     _IP = {
@@ -27,7 +26,6 @@ class interfaces(object):
         "name": "networkTags",
         "step": "IpIncr",
         "count": "Count",
-        "max_count": "maxCountPerAgent",
     }
 
     _MTU_MSS = {

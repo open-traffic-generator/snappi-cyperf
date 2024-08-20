@@ -37,7 +37,7 @@ Validate,
 import snappi
 
 # host is Cyperf API Server
-api = snappi.api(location="https://localhost:443", ext="cyperf")
+api = snappi.api(location="http://127.0.0.1:5000", verify=False)
 config = api.config()
 # port location is agent-ip
 tx = config.ports.port(name="tx", location="10.39.44.147")[-1]
@@ -59,8 +59,8 @@ e2.count = 2
 e2.mtu = 1488
 
 (vlan1,) = e1.vlans.vlan(name="vlan1")
-vlan1.id = 1
-vlan1.priority = 1
+vlan1.id = 181
+vlan1.priority = 0
 vlan1.tpid = "x8100"
 vlan1.count = 1
 vlan1.step = 1
@@ -68,7 +68,7 @@ vlan1.per_count = 1
 
 (vlan2,) = e2.vlans.vlan(name="vlan2")
 vlan2.id = 1
-vlan2.priority = 1
+vlan2.priority = 0
 vlan2.tpid = "x8100"
 vlan2.count = 1
 vlan2.step = 1
@@ -92,21 +92,21 @@ ip2.prefix = 16
 
 (t1,) = d1.tcps.tcp(name="Tcp1")
 t1.ip_interface_name = ip1.name
-t1.receive_buffer_size = 1111
-t1.transmit_buffer_size = 1112
+t1.receive_buffer_size = 4096
+t1.transmit_buffer_size = 4096
 t1.retransmission_minimum_timeout = 100
-t1.retransmission_maximum_timeout = 1001
-t1.minimum_source_port = 100
-t1.maximum_source_port = 101
+t1.retransmission_maximum_timeout = 3200
+t1.minimum_source_port = 1024
+t1.maximum_source_port = 65535
 
 (t2,) = d2.tcps.tcp(name="Tcp2")
 t2.ip_interface_name = ip2.name
-t2.receive_buffer_size = 2222
-t2.transmit_buffer_size = 2221
-t2.retransmission_minimum_timeout = 200
-t2.retransmission_maximum_timeout = 2002
-t2.minimum_source_port = 200
-t2.maximum_source_port = 202
+t2.receive_buffer_size = 4096
+t2.transmit_buffer_size = 4096
+t2.retransmission_minimum_timeout = 100
+t2.retransmission_maximum_timeout = 3200
+t2.minimum_source_port = 1024
+t2.maximum_source_port = 65535
 
 (http_1,) = d1.https.http(name="HTTP1")
 http_1.profile = "Chrome"
