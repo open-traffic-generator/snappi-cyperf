@@ -100,12 +100,14 @@ http_2.connection_persistence = "ConnectionPersistenceEnabled"
 
 (tp1,) = config.trafficprofile.trafficprofile()
 (segment1, segment2) = tp1.segment.segment().segment()
-segment1.name = "Linear segment1"
+segment1.name = "step_up_segment"
+segment1.rate = 41
 segment1.duration = 40
-segment2.name = "Linear segment2"
+segment2.name = "step_down_segment"
+segment2.rate = 71
 segment2.duration = 70
 tp1.timeline = [segment1.name, segment2.name]
-tp1.objective_type = ["Connections per second", "Simulated users"]
+tp1.objective_type = ["throughput_kbps", "connection_per_sec"]
 tp1.objective_value = [100, 200]
 (obj1, obj2) = tp1.objectives.objective().objective()
 
